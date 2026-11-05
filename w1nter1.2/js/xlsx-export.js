@@ -25,8 +25,8 @@ async function exportarPresentismoPlantilla() {
     const table = document.querySelector('#content-presentismo table');
     const date = document.getElementById('fecha-presentismo')?.value || new Date().toISOString().slice(0, 10);
 
-    if (!sheetJs?.read || !sheetJs?.writeFile || !sheetJs?.utils) {
-        window.alert('No se pudo cargar la biblioteca Excel. Recarga la página y comprueba tu conexión.');
+    if (!sheetJs?.read || !sheetJs?.write || !sheetJs?.utils) {
+        window.alert('No se pudo cargar SheetJS. Comprueba tu conexión y recarga la página.');
         return;
     }
 
@@ -52,18 +52,22 @@ async function exportarPresentismoPlantilla() {
     try {
         const response = await fetch(TEMPLATE_URL.href, { cache: 'no-store' });
         if (!response.ok) {
-            throw new Error(`No se pudo descargar PRESENTISMO BLANCO.xlsx (${response.status}).`);
+            throw new Error(`No se pudo descargar la plantilla (${response.status}). Ruta: ${TEMPLATE_URL.pathname}`);
         }
 
         const templateBytes = await response.arrayBuffer();
-        if (templateBytes.byteLength === 0) {
-            throw new Error('La plantilla descargada está vacía.');
+        if (!templateBytes.byteLength) throw new Error('El archivo de plantilla está vacío.');
+
+        let workbook;
+        try {
+            workbook = sheetJs.read(templateBytes, { type: 'array' });
+        } catch (error) {
+            throw new Error(`SheetJS no pudo abrir la plantilla: ${error.message}`);
         }
 
-        const workbook = sheetJs.read(templateBytes, { type: 'array' });
         const sheetName = workbook.SheetNames?.[0];
         const sheet = sheetName ? workbook.Sheets[sheetName] : null;
-        if (!sheet) throw new Error('La plantilla no contiene una hoja válida.');
+        if (!sheet) throw new Error('La plantilla no contiene una primera hoja válida.');
 
         completarFechaEncabezado(sheet, date, sheetJs);
         records.forEach((record, index) => {
@@ -81,10 +85,24 @@ async function exportarPresentismoPlantilla() {
             writeCell(sheet, row, TEMPLATE_COLUMNS.coresHours, record.coresHours || '', sheetJs);
         });
 
-        sheetJs.writeFile(workbook, `PLANILLA_PRESENTISMO_${date}.xlsx`, { bookType: 'xlsx' });
+        // Serialize first, then create the download explicitly. This avoids
+        // browser-specific failures in XLSX.writeFile's download helper.
+        const output = sheetJs.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([output], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+        const downloadUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `PLANILLA_PRESENTISMO_${date}.xlsx`;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
     } catch (error) {
         console.error('Error al generar la planilla XLSX:', error);
-        window.alert(`No se pudo generar el archivo Excel. ${error?.message || 'Revisa la conexión y vuelve a intentar.'}`);
+        window.alert(`No se pudo generar el archivo Excel. ${error?.message || 'Error inesperado.'}`);
     } finally {
         exportButton.disabled = false;
         exportButton.textContent = originalText;
@@ -93,7 +111,6 @@ async function exportarPresentismoPlantilla() {
 
 function convertirFilaPresentismo(row) {
     const cells = Array.from(row.cells);
-    // La tabla muestra 4 datos personales, 24 celdas horarias y el estado.
     if (cells.length < 29 || row.querySelector('[colspan]')) return null;
 
     const hours = cells.slice(4, 28).map((cell) => cell.innerText.trim().toLowerCase());
@@ -157,8 +174,7 @@ function completarFechaEncabezado(sheet, date, sheetJs) {
 
     for (let row = range.s.r; row <= Math.min(range.e.r, 40); row += 1) {
         for (let column = range.s.c; column <= Math.min(range.e.c, 15); column += 1) {
-            const address = sheetJs.utils.encode_cell({ r: row, c: column });
-            const cell = sheet[address];
+            const cell = sheet[sheetJs.utils.encode_cell({ r: row, c: column })];
             if (!cell || typeof cell.v !== 'string') continue;
 
             const normalized = cell.v.trim().toUpperCase();
