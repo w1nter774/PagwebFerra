@@ -3,233 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión - Escuela Juan Vucetich Sede Mar del Plata</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Sidebar persistente de 100vh */
-        aside {
-            width: 260px;
-            background-color: #1e293b;
-            border-right: 1px solid #334155;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100vh;
-        }
-
-        .sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid #334155;
-        }
-
-        .sidebar-header h2 {
-            font-size: 15px;
-            color: #38bdf8;
-            line-height: 1.4;
-        }
-
-        .sidebar-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            padding: 15px;
-            flex-grow: 1;
-        }
-
-        .tab-btn {
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            padding: 12px 15px;
-            text-align: left;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .tab-btn:hover, .tab-btn.active {
-            background-color: #0284c7;
-            color: #ffffff;
-        }
-
-        .sidebar-footer {
-            padding: 15px;
-            border-top: 1px solid #334155;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        #user-email {
-            font-size: 12px;
-            color: #cbd5e1;
-            word-break: break-all;
-        }
-
-        #btn-logout {
-            background: #7f1d1d;
-            color: #fca5a5;
-            border: none;
-            padding: 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 12px;
-        }
-
-        #btn-logout:hover {
-            background: #991b1b;
-        }
-
-        /* Contenido Principal */
-        main {
-            flex-grow: 1;
-            padding: 30px;
-            overflow-y: auto;
-            height: 100vh;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Tablas y Estilos Generales */
-        .table-responsive {
-            overflow-x: auto;
-            margin-top: 15px;
-        }
-
-        table.styled-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #1e293b;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        table.styled-table th, table.styled-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #334155;
-            font-size: 13px;
-        }
-
-        table.styled-table th {
-            background-color: #0f172a;
-            color: #38bdf8;
-            font-weight: bold;
-        }
-
-        table.styled-table tr:hover {
-            background-color: #334155;
-        }
-
-        /* Contenedor de Notificaciones Toast (Abajo a la derecha) */
-        #toast-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 9999;
-        }
-
-        .toast {
-            background: #16a34a;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 6px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            font-weight: 500;
-            animation: fadeInOut 3s ease forwards;
-        }
-
-        .btn-danger {
-            background: #dc2626;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: bold;
-        }
-        .btn-danger:hover {
-            background: #b91c1c;
-        }
-    </style>
+    <meta name="theme-color" content="#0f172a">
+    <title>Sistema de Gestión - Escuela Juan Vucetich</title>
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-
-    <!-- Sidebar persistente de 100vh -->
-    <aside>
+    <aside class="sidebar">
         <div>
             <div class="sidebar-header">
-                <h2>Escuela Juan Vucetich<br><span style="font-size: 12px; color: #94a3b8;">Sede Mar del Plata</span></h2>
+                <h2>Escuela Juan Vucetich<br><span>Sede Mar del Plata</span></h2>
             </div>
-            <nav class="sidebar-nav">
-                <button class="tab-btn active" onclick="cambiarPestana('inicio')">🏠 Inicio</button>
-                <button class="tab-btn" onclick="cambiarPestana('efectivos')">👮‍♂️ Efectivos</button>
-                <button class="tab-btn" onclick="cambiarPestana('horarios')">📅 Horarios</button>
-                <button class="tab-btn" onclick="cambiarPestana('presentismo')">📋 Presentismo</button>
-                <button class="tab-btn" onclick="cambiarPestana('banco-cores')">🏦 Banco CORES</button>
+            <nav class="sidebar-nav" aria-label="Menú principal">
+                <button class="tab-btn active" type="button" data-pestana="inicio">🏠 Inicio</button>
+                <button class="tab-btn" type="button" data-pestana="efectivos">👮‍♂️ Efectivos</button>
+                <button class="tab-btn" type="button" data-pestana="horarios">📅 Horarios</button>
+                <button class="tab-btn" type="button" data-pestana="presentismo">📋 Presentismo</button>
+                <button class="tab-btn" type="button" data-pestana="banco-cores">🏦 Banco CORES</button>
             </nav>
         </div>
+
         <div class="sidebar-footer">
             <span id="user-email">Cargando usuario...</span>
-            <button id="btn-logout">Cerrar Sesión</button>
+            <button id="btn-logout" type="button" class="btn-logout">Cerrar sesión</button>
         </div>
     </aside>
 
-    <!-- Contenedor Principal de Pestañas -->
-    <main>
-        <!-- 1. PESTAÑA INICIO -->
-        <div id="content-inicio" class="tab-content active">
-            <h1 style="margin-bottom: 20px; font-size: 22px;">Panel General de Operaciones</h1>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 30px;">
-                <div style="background: #1e293b; padding: 20px; border-radius: 8px; border-left: 4px solid #38bdf8;">
-                    <span style="color: #94a3b8; font-size: 13px;">Total Efectivos</span>
-                    <h2 id="stat-total-efectivos" style="font-size: 28px; margin-top: 5px;">0</h2>
-                </div>
-                <div style="background: #1e293b; padding: 20px; border-radius: 8px; border-left: 4px solid #16a34a;">
-                    <span style="color: #94a3b8; font-size: 13px;">Activos Hoy</span>
-                    <h2 id="stat-activos-hoy" style="font-size: 28px; margin-top: 5px;">0</h2>
-                </div>
-                <div style="background: #1e293b; padding: 20px; border-radius: 8px; border-left: 4px solid #ea580c;">
-                    <span style="color: #94a3b8; font-size: 13px;">En Vacaciones</span>
-                    <h2 id="stat-vacaciones" style="font-size: 28px; margin-top: 5px;">0</h2>
-                </div>
+    <main class="content-area">
+        <section id="content-inicio" class="tab-content active">
+            <h1>Panel General de Operaciones</h1>
+            <div class="stats-grid">
+                <article class="stat-card stat-blue">
+                    <span>Total efectivos</span>
+                    <strong id="stat-total-efectivos">0</strong>
+                </article>
+                <article class="stat-card stat-green">
+                    <span>Activos hoy</span>
+                    <strong id="stat-activos-hoy">0</strong>
+                </article>
+                <article class="stat-card stat-orange">
+                    <span>En vacaciones</span>
+                    <strong id="stat-vacaciones">0</strong>
+                </article>
             </div>
 
-            <div style="background: #1e293b; padding: 20px; border-radius: 8px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="font-size: 16px; color: #f8fafc;">Personal Registrado (Orden Semanal: Domingo a Sábado)</h3>
-                    <span id="fecha-hoy-badge" style="font-size: 12px; background: #0f172a; padding: 5px 10px; border-radius: 4px; color: #38bdf8;">Fecha: --/--/----</span>
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Personal registrado</h2>
+                    <span id="fecha-hoy-badge" class="date-badge">Fecha: --/--/----</span>
                 </div>
                 <div class="table-responsive">
                     <table class="styled-table">
@@ -250,217 +70,191 @@
                                 <th>Acción</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-general">
-                            <!-- Inyectado por JS -->
-                        </tbody>
+                        <tbody id="tabla-general"></tbody>
                     </table>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- 2. PESTAÑA EFECTIVOS -->
-        <div id="content-efectivos" class="tab-content">
-            <h1 style="margin-bottom: 20px; font-size: 22px;">Gestión de Efectivos</h1>
-            <div style="background: #1e293b; padding: 20px; border-radius: 8px; max-width: 600px; margin-bottom: 30px;">
-                <h3 style="margin-bottom: 15px; font-size: 16px; color: #38bdf8;">Registrar Nuevo Efectivo</h3>
-                <form id="form-efectivo" style="display: flex; flex-direction: column; gap: 12px;">
-                    <div>
-                        <label style="font-size: 12px; color: #94a3b8;">Apellido y Nombre</label>
-                        <input type="text" id="nombre" required style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 4px; margin-top: 4px;">
+        <section id="content-efectivos" class="tab-content">
+            <h1>Gestión de efectivos</h1>
+            <div class="panel form-panel">
+                <h2>Registrar nuevo efectivo</h2>
+                <form id="form-efectivo" class="stack-form">
+                    <div class="field">
+                        <label for="nombre">Apellido y nombre</label>
+                        <input type="text" id="nombre" name="nombre" required>
                     </div>
-                    <div>
-                        <label style="font-size: 12px; color: #94a3b8;">Legajo</label>
-                        <input type="text" id="legajo" required style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 4px; margin-top: 4px;">
+                    <div class="field">
+                        <label for="legajo">Legajo</label>
+                        <input type="text" id="legajo" name="legajo" required>
                     </div>
-                    <div>
-                        <label style="font-size: 12px; color: #94a3b8;">Jerarquía / Cargo</label>
-                        <input type="text" id="cargo" required style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 4px; margin-top: 4px;">
+                    <div class="field">
+                        <label for="cargo">Jerarquía / cargo</label>
+                        <input type="text" id="cargo" name="cargo" required>
                     </div>
-                    <div>
-                        <label style="font-size: 12px; color: #94a3b8;">Escalafón</label>
-                        <select id="escalafon" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 4px; margin-top: 4px;">
+                    <div class="field">
+                        <label for="escalafon">Escalafón</label>
+                        <select id="escalafon" name="escalafon">
                             <option value="Comando">Comando</option>
                             <option value="Administrativo">Administrativo</option>
                             <option value="General">General</option>
                         </select>
                     </div>
-                    <button type="submit" style="background: #0284c7; color: white; border: none; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 5px;">Guardar Efectivo</button>
+                    <button type="submit" class="btn-primary">Guardar efectivo</button>
                 </form>
             </div>
-        </div>
+        </section>
 
-        <!-- 3. PESTAÑA HORARIOS -->
-        <div id="content-horarios" class="tab-content">
-            <h1 style="margin-bottom: 20px; font-size: 22px;">Asignación de Horarios Semanales (Domingo a Sábado)</h1>
-            <div style="background: #1e293b; padding: 20px; border-radius: 8px;">
-                <form id="form-horario">
-                    <div style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
-                        <div style="flex: 1; min-width: 250px;">
-                            <label style="font-size: 12px; color: #94a3b8;">Seleccionar Efectivo</label>
-                            <select id="select-efectivo" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 4px; margin-top: 4px;">
+        <section id="content-horarios" class="tab-content">
+            <h1>Asignación de horarios semanales</h1>
+            <div class="panel">
+                <form id="form-horario" class="horario-form">
+                    <div class="planning-topbar">
+                        <div class="field">
+                            <label for="select-efectivo">Seleccionar efectivo</label>
+                            <select id="select-efectivo">
                                 <option value="">Seleccione un efectivo</option>
                             </select>
                         </div>
-                        <div style="flex: 1; min-width: 250px;">
-                            <label style="font-size: 12px; color: #94a3b8;">Inicio de Semana (Obligatoriamente Domingo)</label>
-                            <input type="date" id="semana" required style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 4px; margin-top: 4px;">
+                        <div class="field">
+                            <label for="semana">Inicio de semana (domingo)</label>
+                            <input type="date" id="semana" required>
                         </div>
                     </div>
 
-                    <!-- Contenedores de días de la semana -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px;">
-                        <!-- Día Domingo -->
-                        <div style="background: #0f172a; padding: 12px; border-radius: 6px; border: 1px solid #334155;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <strong style="color: #38bdf8; font-size: 13px;">Domingo</strong>
-                                <button type="button" onclick="agregarBloque('domingo')" style="background: #0284c7; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">+ Turno</button>
+                    <div class="days-grid">
+                        <div class="day-card">
+                            <div class="day-header">
+                                <strong>Domingo</strong>
+                                <button type="button" class="btn-small" data-day="domingo">+ Bloque</button>
                             </div>
-                            <div id="lista-domingo" style="display: flex; flex-direction: column; gap: 6px;"></div>
+                            <div id="lista-domingo" class="day-list"></div>
                         </div>
-                        <!-- Día Lunes -->
-                        <div style="background: #0f172a; padding: 12px; border-radius: 6px; border: 1px solid #334155;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <strong style="color: #38bdf8; font-size: 13px;">Lunes</strong>
-                                <button type="button" onclick="agregarBloque('lunes')" style="background: #0284c7; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">+ Turno</button>
+                        <div class="day-card">
+                            <div class="day-header">
+                                <strong>Lunes</strong>
+                                <button type="button" class="btn-small" data-day="lunes">+ Bloque</button>
                             </div>
-                            <div id="lista-lunes" style="display: flex; flex-direction: column; gap: 6px;"></div>
+                            <div id="lista-lunes" class="day-list"></div>
                         </div>
-                        <!-- Día Martes -->
-                        <div style="background: #0f172a; padding: 12px; border-radius: 6px; border: 1px solid #334155;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <strong style="color: #38bdf8; font-size: 13px;">Martes</strong>
-                                <button type="button" onclick="agregarBloque('martes')" style="background: #0284c7; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">+ Turno</button>
+                        <div class="day-card">
+                            <div class="day-header">
+                                <strong>Martes</strong>
+                                <button type="button" class="btn-small" data-day="martes">+ Bloque</button>
                             </div>
-                            <div id="lista-martes" style="display: flex; flex-direction: column; gap: 6px;"></div>
+                            <div id="lista-martes" class="day-list"></div>
                         </div>
-                        <!-- Día Miércoles -->
-                        <div style="background: #0f172a; padding: 12px; border-radius: 6px; border: 1px solid #334155;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <strong style="color: #38bdf8; font-size: 13px;">Miércoles</strong>
-                                <button type="button" onclick="agregarBloque('miercoles')" style="background: #0284c7; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">+ Turno</button>
+                        <div class="day-card">
+                            <div class="day-header">
+                                <strong>Miércoles</strong>
+                                <button type="button" class="btn-small" data-day="miercoles">+ Bloque</button>
                             </div>
-                            <div id="lista-miercoles" style="display: flex; flex-direction: column; gap: 6px;"></div>
+                            <div id="lista-miercoles" class="day-list"></div>
                         </div>
-                        <!-- Día Jueves -->
-                        <div style="background: #0f172a; padding: 12px; border-radius: 6px; border: 1px solid #334155;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <strong style="color: #38bdf8; font-size: 13px;">Jueves</strong>
-                                <button type="button" onclick="agregarBloque('jueves')" style="background: #0284c7; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">+ Turno</button>
+                        <div class="day-card">
+                            <div class="day-header">
+                                <strong>Jueves</strong>
+                                <button type="button" class="btn-small" data-day="jueves">+ Bloque</button>
                             </div>
-                            <div id="lista-jueves" style="display: flex; flex-direction: column; gap: 6px;"></div>
+                            <div id="lista-jueves" class="day-list"></div>
                         </div>
-                        <!-- Día Viernes -->
-                        <div style="background: #0f172a; padding: 12px; border-radius: 6px; border: 1px solid #334155;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <strong style="color: #38bdf8; font-size: 13px;">Viernes</strong>
-                                <button type="button" onclick="agregarBloque('viernes')" style="background: #0284c7; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">+ Turno</button>
+                        <div class="day-card">
+                            <div class="day-header">
+                                <strong>Viernes</strong>
+                                <button type="button" class="btn-small" data-day="viernes">+ Bloque</button>
                             </div>
-                            <div id="lista-viernes" style="display: flex; flex-direction: column; gap: 6px;"></div>
+                            <div id="lista-viernes" class="day-list"></div>
                         </div>
-                        <!-- Día Sábado -->
-                        <div style="background: #0f172a; padding: 12px; border-radius: 6px; border: 1px solid #334155;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <strong style="color: #38bdf8; font-size: 13px;">Sábado</strong>
-                                <button type="button" onclick="agregarBloque('sabado')" style="background: #0284c7; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">+ Turno</button>
+                        <div class="day-card">
+                            <div class="day-header">
+                                <strong>Sábado</strong>
+                                <button type="button" class="btn-small" data-day="sabado">+ Bloque</button>
                             </div>
-                            <div id="lista-sabado" style="display: flex; flex-direction: column; gap: 6px;"></div>
+                            <div id="lista-sabado" class="day-list"></div>
                         </div>
                     </div>
 
-                    <button type="submit" style="background: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer;">Guardar Horario Semanal</button>
+                    <button type="submit" class="btn-success">Guardar horario semanal</button>
                 </form>
             </div>
-        </div>
+        </section>
 
-        <!-- 4. PESTAÑA PRESENTISMO -->
-        <div id="content-presentismo" class="tab-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
-                <h1 style="font-size: 22px;">Presentismo Diario</h1>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <input type="date" id="fecha-presentismo" style="padding: 6px 10px; background: #1e293b; border: 1px solid #475569; color: white; border-radius: 4px;">
-                    <button onclick="exportarPresentismoExcel()" style="background: #16a34a; color: white; border: none; padding: 7px 14px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px;">📊 Exportar a Excel</button>
+        <section id="content-presentismo" class="tab-content">
+            <div class="panel-header presentismo-header">
+                <h1>Presentismo diario</h1>
+                <div class="presentismo-controls">
+                    <input type="date" id="fecha-presentismo">
+                    <button type="button" class="btn-success" onclick="window.exportarPresentismoExcel()">Exportar Excel</button>
                 </div>
             </div>
-            <div style="background: #1e293b; padding: 20px; border-radius: 8px;">
-                <div class="table-responsive">
+
+            <div class="panel">
+                <div class="table-responsive table-scroll">
                     <table class="styled-table">
                         <thead id="thead-presentismo"></thead>
                         <tbody id="tabla-presentismo"></tbody>
                     </table>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- 5. PESTAÑA BANCO CORES -->
-        <div id="content-banco-cores" class="tab-content">
-            <div style="background: #1e293b; border: 1px solid #334155; padding: 25px; border-radius: 8px; max-width: 900px; margin: 0 auto;">
-                <h2 style="margin-top: 0; color: #f8fafc; font-size: 20px;">🏦 Gestión de Banco de Horas CORES Mensual</h2>
-                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">
-                    Configura el cupo total de horas disponibles para el mes y visualiza el consumo global y el saldo restante en tiempo real.
-                </p>
+        <section id="content-banco-cores" class="tab-content">
+            <div class="panel core-panel">
+                <h2>Banco de horas CORES mensual</h2>
+                <p class="helper-text">Configura el cupo mensual y revisa el detalle del consumo.</p>
 
-                <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 25px; flex-wrap: wrap;">
-                    <form onsubmit="guardarBancoCoresMensual(event)" style="display: flex; gap: 10px; align-items: center; background: #0f172a; padding: 15px; border-radius: 6px; flex: 1; min-width: 300px;">
-                        <label style="color: #cbd5e1; font-weight: bold; font-size: 14px;">Cupo Total Mensual Configurado:</label>
-                        <input type="number" id="input-banco-cores-total" value="150" min="0" style="background: #1e293b; border: 1px solid #475569; color: white; padding: 8px 12px; border-radius: 4px; width: 90px; font-size: 14px;">
-                        <button type="submit" style="background: #0284c7; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer;">Guardar Cupo</button>
+                <div class="core-controls">
+                    <form id="form-banco-cores" class="core-form" onsubmit="window.guardarBancoCoresMensual(event)">
+                        <label for="input-banco-cores-total">Cupo total mensual</label>
+                        <input type="number" id="input-banco-cores-total" value="150" min="0">
+                        <button type="submit" class="btn-primary small">Guardar cupo</button>
                     </form>
 
-                    <button type="button" onclick="limpiarHorasCoresHuerfanas()" style="background: #7f1d1d; color: #fca5a5; border: 1px solid #991b1b; padding: 14px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 8px;">
-                        🗑️ Limpiar / Resetear Horas CORES
+                    <button type="button" class="btn-danger small" onclick="window.limpiarHorasCoresHuerfanas()">
+                        🗑️ Resetear CORES
                     </button>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px;">
-                    <div style="background: #0f172a; padding: 15px; border-radius: 6px; border-left: 4px solid #38bdf8;">
-                        <span style="color: #94a3b8; font-size: 13px; display: block;">Cupo Total Mensual</span>
-                        <strong id="card-total-cores" style="color: #f8fafc; font-size: 22px;">150 hs</strong>
-                    </div>
-                    <div style="background: #0f172a; padding: 15px; border-radius: 6px; border-left: 4px solid #ea580c;">
-                        <span style="color: #94a3b8; font-size: 13px; display: block;">Horas CORES Asignadas (Gastadas)</span>
-                        <strong id="card-consumidas-cores" style="color: #ea580c; font-size: 22px;">0 hs</strong>
-                    </div>
-                    <div style="background: #0f172a; padding: 15px; border-radius: 6px; border-left: 4px solid #16a34a;">
-                        <span style="color: #94a3b8; font-size: 13px; display: block;">Horas CORES Restantes (Disponibles)</span>
-                        <strong id="card-restantes-cores" style="color: #16a34a; font-size: 22px;">150 hs</strong>
-                    </div>
+                <div class="stats-grid compact-grid">
+                    <article class="stat-card stat-blue">
+                        <span>Cupo total</span>
+                        <strong id="card-total-cores">150 hs</strong>
+                    </article>
+                    <article class="stat-card stat-orange">
+                        <span>Horas asignadas</span>
+                        <strong id="card-consumidas-cores">0 hs</strong>
+                    </article>
+                    <article class="stat-card stat-green">
+                        <span>Horas restantes</span>
+                        <strong id="card-restantes-cores">150 hs</strong>
+                    </article>
                 </div>
 
-                <!-- Desplegable de detalle de consumo CORES -->
-                <div style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; overflow: hidden;">
-                    <details style="padding: 15px; cursor: pointer;">
-                        <summary style="font-weight: bold; color: #38bdf8; font-size: 14px; outline: none;">
-                            📋 Ver detalle de quién y dónde se usaron las horas CORES (Desplegar)
-                        </summary>
-                        <div style="margin-top: 15px; border-top: 1px solid #334155; padding-top: 10px;">
-                            <div class="table-responsive">
-                                <table class="styled-table" style="width: 100%;">
-                                    <thead>
-                                        <tr style="background: #020617;">
-                                            <th>Efectivo</th>
-                                            <th>Legajo</th>
-                                            <th>Escalafón</th>
-                                            <th>Semana / Período</th>
-                                            <th>Día y Rango Horario CORES</th>
-                                            <th>Total Horas</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tabla-detalle-cores">
-                                        <!-- Inyectado dinámicamente por JS -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </details>
-                </div>
+                <details class="cores-detail">
+                    <summary>📋 Ver detalle de consumo CORES</summary>
+                    <div class="table-responsive cores-table-wrap">
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Efectivo</th>
+                                    <th>Legajo</th>
+                                    <th>Escalafón</th>
+                                    <th>Semana / Período</th>
+                                    <th>Día y rango horario</th>
+                                    <th>Total horas</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-detalle-cores"></tbody>
+                        </table>
+                    </div>
+                </details>
             </div>
-        </div>
+        </section>
     </main>
 
-    <!-- Contenedor dinámico de notificaciones flotantes (toast) -->
-    <div id="toast-container"></div>
+    <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-    <!-- Script principal de Firebase y lógica del dashboard -->
     <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
