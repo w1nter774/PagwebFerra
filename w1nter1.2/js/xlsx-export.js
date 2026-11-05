@@ -1,5 +1,5 @@
 const exportButton = document.getElementById('btn-exportar-presentismo');
-const TEMPLATE_URL = 'https://raw.githubusercontent.com/w1nter774/PagwebFerra/main/w1nter1.2/PRESENTISMO%20BLANCO.xlsx';
+const TEMPLATE_URL = new URL('../PRESENTISMO BLANCO.xlsx', import.meta.url);
 const TEMPLATE_FIRST_DATA_ROW = 6;
 const TEMPLATE_LAST_DATA_ROW = 31;
 const TEMPLATE_COLUMNS = {
@@ -35,8 +35,9 @@ async function exportarPresentismoPlantilla() {
         return;
     }
 
-    const visibleRows = Array.from(table.tBodies[0]?.rows || []);
-    const records = visibleRows.map((row) => convertirFilaPresentismo(row)).filter(Boolean);
+    const records = Array.from(table.tBodies[0]?.rows || [])
+        .map(convertirFilaPresentismo)
+        .filter(Boolean);
     const capacity = TEMPLATE_LAST_DATA_ROW - TEMPLATE_FIRST_DATA_ROW + 1;
 
     if (records.length > capacity) {
@@ -49,13 +50,19 @@ async function exportarPresentismoPlantilla() {
     exportButton.textContent = 'Preparando archivo…';
 
     try {
-        const response = await fetch(TEMPLATE_URL, { cache: 'no-store' });
-        if (!response.ok) throw new Error(`No se pudo descargar la plantilla (${response.status}).`);
+        const response = await fetch(TEMPLATE_URL.href, { cache: 'no-store' });
+        if (!response.ok) {
+            throw new Error(`No se pudo descargar PRESENTISMO BLANCO.xlsx (${response.status}).`);
+        }
 
         const templateBytes = await response.arrayBuffer();
-        const workbook = sheetJs.read(templateBytes, { type: 'array', cellStyles: true });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
+        if (templateBytes.byteLength === 0) {
+            throw new Error('La plantilla descargada está vacía.');
+        }
+
+        const workbook = sheetJs.read(templateBytes, { type: 'array' });
+        const sheetName = workbook.SheetNames?.[0];
+        const sheet = sheetName ? workbook.Sheets[sheetName] : null;
         if (!sheet) throw new Error('La plantilla no contiene una hoja válida.');
 
         completarFechaEncabezado(sheet, date, sheetJs);
@@ -86,15 +93,17 @@ async function exportarPresentismoPlantilla() {
 
 function convertirFilaPresentismo(row) {
     const cells = Array.from(row.cells);
-    // Columns 0-3 are personnel; 4-27 are 24 hourly cells; 28 is status.
-    if (cells.length < 29) return null;
+    // La tabla muestra 4 datos personales, 24 celdas horarias y el estado.
+    if (cells.length < 29 || row.querySelector('[colspan]')) return null;
 
-    const hours = cells.slice(4, 28).map((cell) => cell.innerText.trim());
-    const ordinaryHours = hours.reduce((sum, label) => sum + (label === 'Serv' || label === 'Cat' ? 1 : 0), 0);
-    const coresHours = hours.reduce((sum, label) => sum + (label === 'Core' ? 1 : 0), 0);
-
-    const ordinaryRange = getTimeRange(hours, (label) => label === 'Serv' || label === 'Cat');
-    const coresRange = getTimeRange(hours, (label) => label === 'Core');
+    const hours = cells.slice(4, 28).map((cell) => cell.innerText.trim().toLowerCase());
+    const esServicio = (label) => label === 'serv' || label === 'serv.';
+    const esCatedra = (label) => label === 'cat' || label === 'cat.';
+    const esCores = (label) => label === 'core' || label === 'cores';
+    const ordinaryHours = hours.reduce((sum, label) => sum + (esServicio(label) || esCatedra(label) ? 1 : 0), 0);
+    const coresHours = hours.reduce((sum, label) => sum + (esCores(label) ? 1 : 0), 0);
+    const ordinaryRange = getTimeRange(hours, (label) => esServicio(label) || esCatedra(label));
+    const coresRange = getTimeRange(hours, esCores);
 
     return {
         nombre: cells[0].innerText.trim(),
@@ -124,40 +133,38 @@ function getTimeRange(hours, matches) {
 }
 
 function formatHour(hour) {
-    if (hour === 24) return '24:00';
     return `${String(hour).padStart(2, '0')}:00`;
 }
 
 function writeCell(sheet, row, column, value, sheetJs) {
     const address = sheetJs.utils.encode_cell({ r: row, c: column });
-    const cell = sheet[address] || {};
-    cell.v = value;
-    cell.t = typeof value === 'number' ? 'n' : 's';
-    sheet[address] = cell;
+    const existingCell = sheet[address] || {};
+    existingCell.v = value;
+    existingCell.t = typeof value === 'number' ? 'n' : 's';
+    sheet[address] = existingCell;
 }
 
 function completarFechaEncabezado(sheet, date, sheetJs) {
     const [year, month, day] = date.split('-');
-    const dateText = `${day}/${month}/${year}`;
-    const monthText = new Date(Number(year), Number(month) - 1, 1).toLocaleDateString('es-AR', { month: 'long' });
-    const values = Object.values(sheet).filter((cell) => cell && typeof cell.v === 'string');
+    if (!year || !month || !day) return;
 
-    const labelCells = [];
-    const range = sheet['!ref'] ? sheetJs.utils.decode_range(sheet['!ref']) : { s: { r: 0, c: 0 }, e: { r: 40, c: 15 } };
+    const dateText = `${day}/${month}/${year}`;
+    const monthText = new Date(Number(year), Number(month) - 1, 1)
+        .toLocaleDateString('es-AR', { month: 'long' });
+    const range = sheet['!ref']
+        ? sheetJs.utils.decode_range(sheet['!ref'])
+        : { s: { r: 0, c: 0 }, e: { r: 40, c: 15 } };
+
     for (let row = range.s.r; row <= Math.min(range.e.r, 40); row += 1) {
         for (let column = range.s.c; column <= Math.min(range.e.c, 15); column += 1) {
             const address = sheetJs.utils.encode_cell({ r: row, c: column });
             const cell = sheet[address];
             if (!cell || typeof cell.v !== 'string') continue;
+
             const normalized = cell.v.trim().toUpperCase();
-            if (/^FECHA\s*:?$/.test(normalized)) labelCells.push({ cell, text: `FECHA: ${dateText}` });
-            if (/^MES\s*:?$/.test(normalized)) labelCells.push({ cell, text: `MES: ${monthText}` });
-            if (/^AÑO\s*:?$|^ANO\s*:?$/.test(normalized)) labelCells.push({ cell, text: `AÑO: ${year}` });
+            if (/^FECHA\s*:?$/.test(normalized)) cell.v = `FECHA: ${dateText}`;
+            if (/^MES\s*:?$/.test(normalized)) cell.v = `MES: ${monthText}`;
+            if (/^AÑO\s*:?$|^ANO\s*:?$/.test(normalized)) cell.v = `AÑO: ${year}`;
         }
     }
-
-    labelCells.forEach(({ cell, text }) => { cell.v = text; });
-    // Keep the variable reference explicit for older SheetJS builds that expect
-    // the worksheet range to remain untouched while updating styled cells.
-    void values;
 }
