@@ -185,7 +185,7 @@
                 <h1>Presentismo diario</h1>
                 <div class="presentismo-controls">
                     <input type="date" id="fecha-presentismo">
-                    <button type="button" class="btn-success" onclick="window.exportarPresentismoExcel()">Exportar Excel</button>
+                    <button type="button" id="btn-exportar-presentismo" class="btn-success">Exportar Excel (.xlsx)</button>
                 </div>
             </div>
 
@@ -255,6 +255,8 @@
 
     <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
     <script type="module" src="js/dashboard.js"></script>
+    <script type="module" src="js/xlsx-export.js"></script>
 </body>
 </html>
