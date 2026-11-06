@@ -94,6 +94,8 @@ function agregarBloque(dia, tipo = 'Servicio', entrada = '08:00', salida = '16:0
 
     bloque.querySelector('button').addEventListener('click', () => bloque.remove());
     contenedor.appendChild(bloque);
+    contenedor.closest('.day-card')?.setAttribute('open', '');
+    bloque.querySelector('.tipo-hora').focus();
 }
 
 function validarSuperposicion(bloques) {

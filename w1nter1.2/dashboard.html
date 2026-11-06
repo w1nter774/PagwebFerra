@@ -8,18 +8,17 @@
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-    <aside class="sidebar">
+    <aside id="app-sidebar" class="sidebar">
         <div>
             <div class="sidebar-header">
                 <h2>Escuela Juan Vucetich<br><span>Sede Mar del Plata</span></h2>
             </div>
-            <nav class="sidebar-nav" aria-label="Menú principal">
-                <button class="tab-btn active" type="button" data-pestana="inicio">🏠 Inicio</button>
-                <button class="tab-btn" type="button" data-pestana="efectivos">👮‍♂️ Efectivos</button>
-                <button class="tab-btn" type="button" data-pestana="horarios">📅 Horarios</button>
-                <button class="tab-btn" type="button" data-pestana="presentismo">📋 Presentismo</button>
-                <button class="tab-btn" type="button" data-pestana="banco-cores">🏦 Banco CORES</button>
-            </nav>
+            <nav id="main-navigation" class="sidebar-nav" aria-label="Menú principal">
+                <button class="tab-btn active" type="button" data-pestana="inicio">Inicio</button>
+                <button class="tab-btn" type="button" data-pestana="efectivos">Efectivos</button>
+                <button class="tab-btn" type="button" data-pestana="horarios">Horarios</button>
+                <button class="tab-btn" type="button" data-pestana="presentismo">Presentismo</button>
+                <button class="tab-btn" type="button" data-pestana="banco-cores">Banco CORES</button>
         </div>
 
         <div class="sidebar-footer">
@@ -29,6 +28,12 @@
     </aside>
 
     <main class="content-area">
+        <div class="sidebar-toggle-row">
+            <button id="btn-sidebar-toggle" class="sidebar-toggle" type="button" aria-expanded="true" aria-controls="app-sidebar">
+                <span class="sidebar-toggle-icon" aria-hidden="true"></span>
+                <span class="sidebar-toggle-label">Ocultar menú</span>
+            </button>
+        </div>
         <section id="content-inicio" class="tab-content active">
             <h1>Panel General de Operaciones</h1>
             <div class="stats-grid">
@@ -124,55 +129,34 @@
                     </div>
 
                     <div class="days-grid">
-                        <div class="day-card">
-                            <div class="day-header">
-                                <strong>Domingo</strong>
-                                <button type="button" class="btn-small" data-day="domingo">+ Bloque</button>
-                            </div>
-                            <div id="lista-domingo" class="day-list"></div>
-                        </div>
-                        <div class="day-card">
-                            <div class="day-header">
-                                <strong>Lunes</strong>
-                                <button type="button" class="btn-small" data-day="lunes">+ Bloque</button>
-                            </div>
-                            <div id="lista-lunes" class="day-list"></div>
-                        </div>
-                        <div class="day-card">
-                            <div class="day-header">
-                                <strong>Martes</strong>
-                                <button type="button" class="btn-small" data-day="martes">+ Bloque</button>
-                            </div>
-                            <div id="lista-martes" class="day-list"></div>
-                        </div>
-                        <div class="day-card">
-                            <div class="day-header">
-                                <strong>Miércoles</strong>
-                                <button type="button" class="btn-small" data-day="miercoles">+ Bloque</button>
-                            </div>
-                            <div id="lista-miercoles" class="day-list"></div>
-                        </div>
-                        <div class="day-card">
-                            <div class="day-header">
-                                <strong>Jueves</strong>
-                                <button type="button" class="btn-small" data-day="jueves">+ Bloque</button>
-                            </div>
-                            <div id="lista-jueves" class="day-list"></div>
-                        </div>
-                        <div class="day-card">
-                            <div class="day-header">
-                                <strong>Viernes</strong>
-                                <button type="button" class="btn-small" data-day="viernes">+ Bloque</button>
-                            </div>
-                            <div id="lista-viernes" class="day-list"></div>
-                        </div>
-                        <div class="day-card">
-                            <div class="day-header">
-                                <strong>Sábado</strong>
-                                <button type="button" class="btn-small" data-day="sabado">+ Bloque</button>
-                            </div>
-                            <div id="lista-sabado" class="day-list"></div>
-                        </div>
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Domingo</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn-small" data-day="domingo">+ Bloque</button><div id="lista-domingo" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Lunes</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn-small" data-day="lunes">+ Bloque</button><div id="lista-lunes" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Martes</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn-small" data-day="martes">+ Bloque</button><div id="lista-martes" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Miércoles</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn-small" data-day="miercoles">+ Bloque</button><div id="lista-miercoles" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Jueves</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn-small" data-day="jueves">+ Bloque</button><div id="lista-jueves" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Viernes</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn-small" data-day="viernes">+ Bloque</button><div id="lista-viernes" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Sábado</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn-small" data-day="sabado">+ Bloque</button><div id="lista-sabado" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
                     </div>
 
                     <button type="submit" class="btn-success">Guardar horario semanal</button>
@@ -256,6 +240,8 @@
     <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
     <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/schedule-ui.js"></script>
     <script type="module" src="js/dashboard.js"></script>
     <script type="module" src="js/xlsx-export.js"></script>
 </body>
