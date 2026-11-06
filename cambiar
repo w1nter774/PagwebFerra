@@ -1,0 +1,6 @@
+- En inicio se tiene que mostrar la semana en la que nos encontramos y ahi mostrar los horarios unicamente de esa semana.
+- Mejorar el formulario de efectivos para que sea mas intuitivo para el usuario. 
+- Mejorar el como se muestra en la pestaña de presentismo, que no se vea en un formato de 24 horas sino que se vea algo mejor tal como la planilla que se brinda para rellenar con los datos
+previstos que se rellenaron previamente al asignarle un horario al personal. 
+- Pestaña de banco CORES, no me gusta como se ve visualmente la verdad asi que habria que mejorarla, el tema de los datos huerfanos que se encuentran de vez en cuando, cuando se elimina un 
+efectivo que tenia horas CORES previamente establecidas no queden de manera huerfana, comiendo las horas que estableces por mes y asi deshabilitar el boton de 
