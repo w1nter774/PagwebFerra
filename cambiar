@@ -1,6 +1,16 @@
-- En inicio se tiene que mostrar la semana en la que nos encontramos y ahi mostrar los horarios unicamente de esa semana.
+PRINCIPAL:
+- En inicio se tiene que mostrar la semana en la que nos encontramos y ahi mostrar los horarios unicamente de esa semana(Establecer que tome la hora local y no la utc por las dudas, mas que nada
+para que no haya errores de hora al momento de abrir la web).
 - Mejorar el formulario de efectivos para que sea mas intuitivo para el usuario. 
 - Mejorar el como se muestra en la pestaña de presentismo, que no se vea en un formato de 24 horas sino que se vea algo mejor tal como la planilla que se brinda para rellenar con los datos
 previstos que se rellenaron previamente al asignarle un horario al personal. 
 - Pestaña de banco CORES, no me gusta como se ve visualmente la verdad asi que habria que mejorarla, el tema de los datos huerfanos que se encuentran de vez en cuando, cuando se elimina un 
-efectivo que tenia horas CORES previamente establecidas no queden de manera huerfana, comiendo las horas que estableces por mes y asi deshabilitar el boton de 
+efectivo que tenia horas CORES previamente establecidas no queden de manera huerfana, comiendo las horas que estableces por mes.
+
+SECUNDARIO:
+- Mejorar la seguridad de la pagina:
+* Establecer permisos en los distintos usuarios creados, tanto sea para vistas, para administrar los horarios o para administrar usuarios y lo anteriormente mencionado.
+* Deshabilitar la opcion de crear una cuenta nueva. Se busca que no se pueda crear una cuenta cualquiera, y que en esta se pueda acceder a modificar horarios. Unicamente que el administrador pueda
+dar de alta o baja a los usuarios.
+- Encriptar la web, si no me gusta que se queden sin NADA.
+- Realizar un chequeo de todas las reglas impuestas para que nada termine dando un dato erroneo.
