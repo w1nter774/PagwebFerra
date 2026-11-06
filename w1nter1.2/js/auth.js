@@ -1,7 +1,6 @@
 import {
     auth,
     signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
     onAuthStateChanged
 } from './firebase-config.js';
 
@@ -10,27 +9,18 @@ const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const submitButton = document.getElementById('btn-submit');
 const alertBox = document.getElementById('alert-box');
-const loginHeader = document.getElementById('header-login');
-const registerHeader = document.getElementById('header-register');
-const toggleButton = document.getElementById('toggle-btn');
-const toggleText = document.getElementById('toggle-text');
 
 const requiredElements = [
     authForm,
     emailInput,
     passwordInput,
     submitButton,
-    alertBox,
-    loginHeader,
-    registerHeader,
-    toggleButton,
-    toggleText
+    alertBox
 ];
 
 if (requiredElements.some((element) => !element)) {
     console.error('No se pudo iniciar el formulario: faltan elementos requeridos en index.html.');
 } else {
-    let isLoginMode = true;
     let isSubmitting = false;
 
     onAuthStateChanged(
@@ -45,24 +35,6 @@ if (requiredElements.some((element) => !element)) {
             showAlert('No se pudo comprobar tu sesión. Recarga la página e inténtalo de nuevo.', 'error');
         }
     );
-
-    toggleButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        if (isSubmitting) return;
-
-        isLoginMode = !isLoginMode;
-        loginHeader.classList.toggle('hidden', !isLoginMode);
-        loginHeader.setAttribute('aria-hidden', String(!isLoginMode));
-        registerHeader.classList.toggle('hidden', isLoginMode);
-        registerHeader.setAttribute('aria-hidden', String(isLoginMode));
-
-        submitButton.textContent = isLoginMode ? 'Iniciar sesión' : 'Crear cuenta';
-        toggleText.textContent = isLoginMode ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?';
-        toggleButton.textContent = isLoginMode ? 'Registrarse' : 'Iniciar sesión';
-        passwordInput.autocomplete = isLoginMode ? 'current-password' : 'new-password';
-        passwordInput.value = '';
-        showAlert('');
-    });
 
     authForm.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -85,11 +57,7 @@ if (requiredElements.some((element) => !element)) {
         showAlert('Conectando…', 'info');
 
         try {
-            if (isLoginMode) {
-                await signInWithEmailAndPassword(auth, email, password);
-            } else {
-                await createUserWithEmailAndPassword(auth, email, password);
-            }
+            await signInWithEmailAndPassword(auth, email, password);
             window.location.replace('dashboard.html');
         } catch (error) {
             setSubmitting(false);
@@ -100,10 +68,7 @@ if (requiredElements.some((element) => !element)) {
     function setSubmitting(submitting) {
         isSubmitting = submitting;
         submitButton.disabled = submitting;
-        toggleButton.setAttribute('aria-disabled', String(submitting));
-        submitButton.textContent = submitting
-            ? 'Procesando…'
-            : (isLoginMode ? 'Iniciar sesión' : 'Crear cuenta');
+        submitButton.textContent = submitting ? 'Procesando…' : 'Iniciar sesión';
     }
 
     function showAlert(message, type = '') {
