@@ -1,0 +1,325 @@
+/* ============================================
+   AUTH PAGE - PROFESSIONAL DESIGN SYSTEM
+   Compatible con dashboard.css (mismos tokens)
+   ============================================ */
+
+/* Importar variables del design system (inline para evitar request extra) */
+:root {
+  /* --- Superficies (Dark - login usa dark mode) --- */
+  --surface-0:      #0d0d0d;
+  --surface-1:      #1a1a19;
+  --surface-2:      #242422;
+  --surface-strong: #f0efec;
+
+  /* --- Ink (Dark) --- */
+  --ink-primary:   #f0efec;
+  --ink-secondary: #c3c2b7;
+  --ink-muted:     #898781;
+  --ink-inverse:   #0b0b0b;
+
+  /* --- Bordes (Dark) --- */
+  --border-hair:   #2c2c2a;
+  --border-soft:   #3a3a37;
+  --border-strong: #383835;
+
+  /* --- Categorical (Dark) --- */
+  --cat-1: #3987e5;  /* blue - primary */
+  --cat-2: #d95926;  /* orange */
+  --cat-3: #199e70;  /* aqua/green */
+
+  /* --- Status (Dark) --- */
+  --status-good:        #0ca30c;
+  --status-warning:     #fab219;
+  --status-serious:     #ec835a;
+  --status-critical:    #d03b3b;
+  --status-good-text:   #0ca30c;
+  --status-warning-text:#0b0b0b;
+  --status-critical-text:#ffffff;
+
+  /* --- Sombras --- */
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.25);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.30);
+  --shadow-lg:  0 12px 28px rgba(0,0,0,0.35);
+  --shadow-xl:  0 20px 40px rgba(0,0,0,0.40);
+
+  /* --- Radio & Transiciones --- */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-full: 999px;
+  --transition-fast: 120ms ease;
+  --transition-base: 160ms ease;
+
+  /* Focus ring */
+  --focus-ring: rgba(57, 135, 229, 0.3);
+}
+
+/* Light mode support (por si el usuario lo fuerza) */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --surface-0:      #f9f9f7;
+    --surface-1:      #fcfcfb;
+    --surface-2:      #f3f2ee;
+    --surface-strong: #0f172a;
+
+    --ink-primary:   #0b0b0b;
+    --ink-secondary: #52514e;
+    --ink-muted:     #898781;
+    --ink-inverse:   #ffffff;
+
+    --border-hair:   #e1e0d9;
+    --border-soft:   #d0cec7;
+    --border-strong: #c3c2b7;
+
+    --cat-1: #2a78d6;
+    --cat-2: #eb6834;
+    --cat-3: #1baf7a;
+
+    --shadow-sm:  0 1px 2px rgba(11,11,11,0.06);
+    --shadow-md:  0 4px 12px rgba(11,11,11,0.08);
+    --shadow-lg:  0 12px 28px rgba(11,11,11,0.10);
+    --shadow-xl:  0 20px 40px rgba(11,11,11,0.12);
+
+    --focus-ring: rgba(42, 120, 214, 0.3);
+  }
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 14px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+  background: var(--surface-0);
+  color: var(--ink-primary);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
+}
+
+/* Background sutil para login */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(57,135,229,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(217,89,38,0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ============================================
+   AUTH CONTAINER
+   ============================================ */
+.auth-container {
+  width: min(100%, 420px);
+  padding: clamp(28px, 6vw, 44px);
+  border: 1px solid var(--border-hair);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-xl);
+  animation: auth-enter var(--transition-slow) ease-out;
+}
+
+@keyframes auth-enter {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.auth-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.auth-header .eyebrow {
+  margin: 0 0 10px;
+  color: var(--cat-1);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.auth-header h1 {
+  margin: 0 0 6px;
+  color: var(--ink-primary);
+  font-size: clamp(1.6rem, 5vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.auth-header p:last-child {
+  margin: 0;
+  color: var(--ink-secondary);
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+/* ============================================
+   FORMULARIO
+   ============================================ */
+.form-group { margin-bottom: 18px; }
+
+.form-group label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--ink-secondary);
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.form-group input {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 13px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background: var(--surface-0);
+  color: var(--ink-primary);
+  font: inherit;
+  font-size: 14px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+
+.form-group input::placeholder { color: var(--ink-muted); }
+
+.form-group input:hover { border-color: var(--border-strong); }
+
+.form-group input:focus,
+.btn:focus-visible {
+  outline: none;
+  border-color: var(--cat-1);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+  background: var(--surface-1);
+}
+
+.form-group input:disabled {
+  background: var(--surface-2);
+  color: var(--ink-muted);
+  cursor: not-allowed;
+}
+
+/* ============================================
+   BOTONES
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn:disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+
+.btn-primary {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 18px;
+  background: var(--cat-1);
+  color: var(--ink-inverse);
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #2e75d1;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active:not(:disabled) { transform: translateY(0); }
+
+/* ============================================
+   ALERT / TOAST
+   ============================================ */
+.alert {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  line-height: 1.5;
+  animation: toast-in var(--transition-base) ease-out;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.alert[hidden] { display: none !important; }
+
+.alert-error {
+  border-color: rgba(208,59,59,0.3);
+  background: rgba(208,59,59,0.12);
+  color: var(--status-critical);
+}
+
+.alert-success {
+  border-color: rgba(12,163,12,0.3);
+  background: rgba(12,163,12,0.12);
+  color: var(--status-good);
+}
+
+.alert-info {
+  border-color: rgba(57,135,229,0.3);
+  background: rgba(57,135,229,0.12);
+  color: var(--cat-1);
+}
+
+.alert-warning {
+  border-color: rgba(250,178,25,0.3);
+  background: rgba(250,178,25,0.15);
+  color: var(--status-warning-text);
+}
+
+/* ============================================
+   TOGGLE MODE / FOOTER
+   ============================================ */
+.toggle-mode {
+  margin: 24px 0 0;
+  color: var(--ink-muted);
+  text-align: center;
+  font-size: 13px;
+}
+
+.toggle-mode a {
+  margin-left: 4px;
+  color: var(--cat-1);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.toggle-mode a:hover { color: var(--ink-primary); text-decoration: underline; }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 480px) {
+  body { padding: 16px; }
+  .auth-container { border-radius: var(--radius-md); padding: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

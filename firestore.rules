@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper: usuario autenticado
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Helper: usuario con rol admin (Custom Claim)
+    function isAdmin() {
+      return request.auth.token.admin == true;
+    }
+
+    // Helper: usuario con rol operador o admin
+    function canWrite() {
+      return request.auth.token.admin == true || request.auth.token.operador == true;
+    }
+
+    // Helper: usuario puede leer (cualquier autenticado)
+    function canRead() {
+      return isSignedIn();
+    }
+
+    // Efectivos: leer todos, escribir solo admin/operador
+    match /efectivos/{docId} {
+      allow read: if canRead();
+      allow create, update, delete: if canWrite();
+    }
+
+    // Horarios: leer todos, escribir solo admin/operador
+    // Al borrar un efectivo, su horario también se borra (via app logic)
+    match /horarios/{docId} {
+      allow read: if canRead();
+      allow create, update, delete: if canWrite();
+    }
+
+    // Config (banco CORES mensual): leer todos, escribir solo admin
+    match /config/{docId} {
+      allow read: if canRead();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Denegar todo lo demás por defecto
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

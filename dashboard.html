@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <title>Sistema de Gestión - Escuela Juan Vucetich</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Mobile sidebar overlay -->
+    <div class="sidebar-overlay" aria-hidden="true"></div>
+
+    <aside id="app-sidebar" class="sidebar" aria-label="Menú principal">
+        <div class="sidebar-header">
+            <button id="btn-sidebar-toggle-desktop" class="sidebar-toggle" type="button" aria-expanded="true" aria-controls="app-sidebar" aria-label="Alternar menú" style="display: none;">
+                <span class="sidebar-toggle-icon" aria-hidden="true"></span>
+                <span class="sidebar-toggle-label">Ocultar menú</span>
+            </button>
+            <h2>Escuela Juan Vucetich<br><span>Sede Mar del Plata</span></h2>
+        </div>
+        <nav id="main-navigation" class="sidebar-nav" aria-label="Navegación principal">
+            <div class="sidebar-nav-top">
+                <!-- Toggle móvil no se usa aquí, está en content-area -->
+            </div>
+            <div class="sidebar-nav-content">
+                <button class="tab-btn active" type="button" data-pestana="inicio"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Inicio</span></button>
+                <button class="tab-btn" type="button" data-pestana="efectivos"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Efectivos</span></button>
+                <button class="tab-btn" type="button" data-pestana="horarios"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Horarios</span></button>
+                <button class="tab-btn" type="button" data-pestana="presentismo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Presentismo</span></button>
+                <button class="tab-btn" type="button" data-pestana="banco-cores"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>Banco CORES</span></button>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <span id="user-email">Cargando usuario...</span>
+            <button id="btn-logout" type="button" class="btn-logout">Cerrar sesión</button>
+        </div>
+    </aside>
+
+    <main class="content-area">
+        <!-- Mobile sidebar toggle (sticky top) -->
+        <div class="sidebar-toggle-row">
+            <button id="btn-sidebar-toggle" class="sidebar-toggle" type="button" aria-expanded="true" aria-controls="app-sidebar" aria-label="Alternar menú">
+                <span class="sidebar-toggle-icon" aria-hidden="true"></span>
+                <span class="sidebar-toggle-label">Ocultar menú</span>
+            </button>
+        </div>
+
+        <!-- INICIO -->
+        <section id="content-inicio" class="tab-content active" role="tabpanel" aria-labelledby="inicio-title">
+            <h1 id="inicio-title">Panel General de Operaciones</h1>
+            <div class="stats-grid" role="list" aria-label="Indicadores principales">
+                <article class="stat-card stat-blue" role="listitem">
+                    <span>Total efectivos</span>
+                    <strong id="stat-total-efectivos">0</strong>
+                </article>
+                <article class="stat-card stat-green" role="listitem">
+                    <span>Activos hoy</span>
+                    <strong id="stat-activos-hoy">0</strong>
+                </article>
+                <article class="stat-card stat-orange" role="listitem">
+                    <span>En vacaciones</span>
+                    <strong id="stat-vacaciones">0</strong>
+                </article>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Personal registrado</h2>
+                    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                        <span id="fecha-hoy-badge" class="date-badge" aria-live="polite">Fecha: --/--/----</span>
+                        <div class="field" style="margin-bottom:0; flex:0 0 auto; min-width:200px;">
+                            <label for="semana-selector" style="font-size:11px; text-transform:uppercase; letter-spacing:0.04em;">Semana</label>
+                            <input type="date" id="semana-selector" aria-label="Seleccionar semana (domingo)">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="styled-table" role="grid" aria-label="Listado de efectivos y horarios">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Legajo</th>
+                                <th scope="col">Cargo</th>
+                                <th scope="col">Escalafón</th>
+                                <th scope="col">Domingo</th>
+                                <th scope="col">Lunes</th>
+                                <th scope="col">Martes</th>
+                                <th scope="col">Miércoles</th>
+                                <th scope="col">Jueves</th>
+                                <th scope="col">Viernes</th>
+                                <th scope="col">Sábado</th>
+                                <th scope="col">Total Hs.</th>
+                                <th scope="col">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-general"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- EFECTIVOS -->
+        <section id="content-efectivos" class="tab-content" role="tabpanel" aria-labelledby="efectivos-title">
+            <h1 id="efectivos-title">Gestión de efectivos</h1>
+            <div class="panel form-panel form-centered">
+                <h2>Registrar nuevo efectivo</h2>
+                <form id="form-efectivo" class="stack-form form-compact" novalidate>
+                    <div class="field">
+                        <label for="nombre">Apellido y nombre</label>
+                        <input type="text" id="nombre" name="nombre" required autocomplete="name" maxlength="100">
+                    </div>
+                    <div class="field">
+                        <label for="legajo">Legajo</label>
+                        <input type="text" id="legajo" name="legajo" required autocomplete="off" maxlength="20">
+                    </div>
+                    <div class="field">
+                        <label for="cargo">Jerarquía / cargo</label>
+                        <input type="text" id="cargo" name="cargo" required autocomplete="off" maxlength="80">
+                    </div>
+                    <div class="field">
+                        <label for="escalafon">Escalafón</label>
+                        <select id="escalafon" name="escalafon" required>
+                            <option value="Comando">Comando</option>
+                            <option value="Administrativo">Administrativo</option>
+                            <option value="General">General</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar efectivo</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- HORARIOS -->
+        <section id="content-horarios" class="tab-content" role="tabpanel" aria-labelledby="horarios-title">
+            <h1 id="horarios-title">Asignación de horarios semanales</h1>
+            <div class="panel">
+                <form id="form-horario" class="horario-form" novalidate>
+                    <div class="planning-topbar">
+                        <div class="field">
+                            <label for="select-efectivo">Seleccionar efectivo</label>
+                            <select id="select-efectivo" required>
+                                <option value="">Seleccione un efectivo</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="semana">Inicio de semana (domingo)</label>
+                            <input type="date" id="semana" required>
+                        </div>
+                    </div>
+
+                    <div class="days-grid" role="group" aria-label="Días de la semana">
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Domingo</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn btn-sm" data-day="domingo">+ Bloque</button><div id="lista-domingo" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Lunes</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn btn-sm" data-day="lunes">+ Bloque</button><div id="lista-lunes" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Martes</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn btn-sm" data-day="martes">+ Bloque</button><div id="lista-martes" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Miércoles</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn btn-sm" data-day="miercoles">+ Bloque</button><div id="lista-miercoles" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Jueves</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn btn-sm" data-day="jueves">+ Bloque</button><div id="lista-jueves" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Viernes</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn btn-sm" data-day="viernes">+ Bloque</button><div id="lista-viernes" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
+                        <details class="day-card" open>
+                            <summary class="day-header"><strong>Sábado</strong><span class="day-summary">Sin bloques</span></summary>
+                            <div class="day-content"><button type="button" class="btn btn-sm" data-day="sabado">+ Bloque</button><div id="lista-sabado" class="day-list"></div><p class="day-empty">Sin bloques asignados</p><p class="day-conflict" role="status" hidden></p></div>
+                        </details>
+                    </div>
+
+                    <button type="submit" class="btn btn-success" style="margin-top: 8px;">Guardar horario semanal</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- PRESENTISMO -->
+        <section id="content-presentismo" class="tab-content" role="tabpanel" aria-labelledby="presentismo-title">
+            <div class="panel-header presentismo-header">
+                <h1 id="presentismo-title">Presentismo diario</h1>
+                <div class="presentismo-controls" style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+                    <label class="field" style="margin-bottom:0; flex:0 0 auto; min-width:180px;">
+                        <span style="font-size:11px; color:var(--ink-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.04em; display:block; margin-bottom:4px;">Fecha</span>
+                        <input type="date" id="fecha-presentismo" aria-label="Fecha de presentismo">
+                    </label>
+                    <div class="view-toggle" role="group" aria-label="Vista de presentismo">
+                        <button type="button" id="btn-vista-grilla" class="btn-toggle active" aria-pressed="true">📊 Grilla 24h</button>
+                        <button type="button" id="btn-vista-planilla" class="btn-toggle" aria-pressed="false">📋 Planilla</button>
+                    </div>
+                    <button type="button" id="btn-exportar-presentismo" class="btn btn-success">Exportar Excel (.xlsx)</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="table-responsive" role="region" aria-label="Tabla de presentismo" tabindex="0">
+                    <table class="styled-table" role="grid" aria-label="Datos de presentismo">
+                        <thead id="thead-presentismo"></thead>
+                        <tbody id="tabla-presentismo"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- BANCO CORES -->
+        <section id="content-banco-cores" class="tab-content" role="tabpanel" aria-labelledby="banco-cores-title">
+            <div class="panel core-panel">
+                <h2 id="banco-cores-title">Banco de horas CORES mensual</h2>
+                <p class="helper-text">Configura el cupo mensual y revisa el detalle del consumo.</p>
+
+                <div class="core-controls">
+                    <form id="form-banco-cores" class="core-form" onsubmit="window.guardarBancoCoresMensual(event)">
+                        <div class="field" style="margin-bottom:0;">
+                            <label for="input-banco-cores-total">Cupo total mensual</label>
+                            <input type="number" id="input-banco-cores-total" value="150" min="0" step="1" aria-label="Cupo total mensual de horas CORES">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm">Guardar cupo</button>
+                    </form>
+
+                    <button type="button" class="btn btn-danger btn-sm" onclick="window.limpiarHorasCoresHuerfanas()">
+                        Resetear CORES
+                    </button>
+                </div>
+
+                <div class="stats-grid compact-grid" role="list" aria-label="Resumen de banco CORES">
+                    <article class="stat-card stat-blue" role="listitem">
+                        <span>Cupo total</span>
+                        <strong id="card-total-cores">150 hs</strong>
+                    </article>
+                    <article class="stat-card stat-orange" role="listitem">
+                        <span>Horas asignadas</span>
+                        <strong id="card-consumidas-cores">0 hs</strong>
+                    </article>
+                    <article class="stat-card stat-green" role="listitem">
+                        <span>Horas restantes</span>
+                        <strong id="card-restantes-cores">150 hs</strong>
+                    </article>
+                </div>
+
+                <details class="cores-detail">
+                    <summary>Ver detalle de consumo CORES</summary>
+                    <div class="table-responsive">
+                        <table class="styled-table" role="grid" aria-label="Detalle de consumo CORES">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Efectivo</th>
+                                    <th scope="col">Legajo</th>
+                                    <th scope="col">Escalafón</th>
+                                    <th scope="col">Semana / Período</th>
+                                    <th scope="col">Día y rango horario</th>
+                                    <th scope="col">Total horas</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-detalle-cores"></tbody>
+                        </table>
+                    </div>
+                </details>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast container -->
+    <div id="toast-container" aria-live="polite" aria-atomic="true" aria-label="Notificaciones"></div>
+
+    <!-- Scripts -->
+    <script src="js/navigation.js"></script>
+    <script type="module" src="js/dashboard.js"></script>
+    <script type="module" src="js/xlsx-export.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "pagweb-ferra",
+  "version": "1.2.0",
+  "description": "Sistema de Gestión - Escuela Juan Vucetich",
+  "type": "module",
+  "scripts": {
+    "set-role": "node scripts/set-user-role.js",
+    "deploy:rules": "firebase deploy --only firestore:rules",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "serve": "firebase serve",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "firebase",
+    "school",
+    "management",
+    "schedule"
+  ],
+  "author": "Escuela Juan Vucetich",
+  "license": "MIT",
+  "devDependencies": {
+    "firebase-admin": "^12.0.0",
+    "firebase-tools": "^13.0.0"
+  }
+}
