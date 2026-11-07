@@ -1,7 +1,9 @@
-# Firebase config with real credentials - NEVER COMMIT
-js/firebase-config.js
+# Firebase config local (credenciales reales) - NEVER COMMIT
 js/firebase-config.local.js
 service-account.json
+
+# js/firebase-config.js se genera en build (Vercel) desde variables de entorno
+# NO commitear manualmente, se regenera en cada deploy
 
 # Environment files
 .env
