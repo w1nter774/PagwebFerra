@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "rootDirectory": "w1nter1.2",
   "buildCommand": "echo 'No build step'",
   "devCommand": "echo 'No dev server'",
   "installCommand": "echo 'No install'",
