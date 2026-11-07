@@ -3,7 +3,6 @@
   "buildCommand": "echo 'No build step'",
   "devCommand": "echo 'No dev server'",
   "installCommand": "echo 'No install'",
-  "framework": "none",
   "rewrites": [
     {
       "source": "/js/firebase-config.local.js",
